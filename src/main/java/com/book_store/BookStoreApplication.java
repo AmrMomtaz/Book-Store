@@ -1,5 +1,6 @@
 package com.book_store;
 
+import com.book_store.model.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

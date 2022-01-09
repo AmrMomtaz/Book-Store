@@ -17,4 +17,6 @@ public interface DAO {
     // sign up: It creates the user record in the database and returns 1 if the insertion succeeded
     int create(User newUser);
 
+    // This function is used to delete user by ID
+    int deleteUser(int ID);
 }

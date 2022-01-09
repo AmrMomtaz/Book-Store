@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class BookStoreDAO implements DAO{
     private int getNewID(){
         int id = -1;
         try {
-            Scanner sc = new Scanner("src/main/resources/index");
+            Scanner sc = new Scanner(new File("src/main/resources/index"));
             id = sc.nextInt();
             sc.close();
             FileWriter fileWriter = new FileWriter("src/main/resources/index");
@@ -93,4 +94,15 @@ public class BookStoreDAO implements DAO{
             log.info("New user added to DB: " + newUser);
         return insert;
     }
+
+    @Override
+    public int deleteUser(int ID) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        int update = jdbcTemplate.update(sql,ID);
+        if(update==1)
+            log.info("User deleted successfully (id="+ ID + ")");
+        return update;
+    }
+
+
 }

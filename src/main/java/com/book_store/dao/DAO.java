@@ -1,5 +1,6 @@
 package com.book_store.dao;
 
+import com.book_store.model.Book;
 import com.book_store.model.User;
 
 public interface DAO {
@@ -8,15 +9,34 @@ public interface DAO {
      * Login functions and signup
      */
 
-    // login function: it returns the user if it exists and null if the data entered is wrong
+    // It returns the user if it exists and null if the data entered is wrong (used in login)
     User login(String email,String password);
 
-    // check email: returns true if the email already exist in the DB
+    // Returns true if the email already exist in the DB (used in signing up)
     boolean checkEmailExists(String email);
 
-    // sign up: It creates the user record in the database and returns 1 if the insertion succeeded
-    int create(User newUser);
+    // It creates the user record in the database and returns 1 if the insertion succeeded (used in signing up)
+    int createUser(User newUser);
 
-    // This function is used to delete user by ID
+    /**
+     *  Books functions (creation, update, delete)
+     */
+
+    // Creates the book in the DB and returns 1 if the insertion succeeded
+    int createBook(Book newBook);
+
+    // Updates the book in the DB and returns 1 if the update succeeded
+    int updateBook(String ISBN, Book newBook);
+
+    // Delete the book in the DB and returns 1 if the deletion succeeded
+    int deleteBook(String ISBN);
+
+    /**
+     * Other functions (Mainly for testing)
+     */
+    // Deletes user by ID
     int deleteUser(int ID);
+
+    // Gets book by ISBN
+    Book getBookByISBN(String ISBN);
 }

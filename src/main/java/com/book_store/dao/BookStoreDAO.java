@@ -1,5 +1,6 @@
 package com.book_store.dao;
 
+import com.book_store.model.Book;
 import com.book_store.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,19 @@ public class BookStoreDAO implements DAO{
         return newUser;
     };
 
+    private final RowMapper<Book> bookRowMapper = (rs, rowNum)-> {
+        String ISBN = rs.getString("ISBN");
+        String title = rs.getString("title");
+        String publisher = rs.getString("publisher");
+        String publication_year = rs.getString("publication_year");
+        int selling_price = rs.getInt("selling_price");
+        String category = rs.getString("category");
+        int threshold = rs.getInt("threshold");
+        int copies = rs.getInt("copies");
+        return new Book(ISBN,title,publisher,publication_year,selling_price,
+                category,threshold,copies);
+    };
+
     @Override
     public User login(String email, String password) {
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -83,7 +97,7 @@ public class BookStoreDAO implements DAO{
     }
 
     @Override
-    public int create(User newUser) {
+    public int createUser(User newUser) {
         int newID = getNewID();
         newUser.setID(newID);
         String sql = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)";
@@ -96,13 +110,56 @@ public class BookStoreDAO implements DAO{
     }
 
     @Override
-    public int deleteUser(int ID) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        int update = jdbcTemplate.update(sql,ID);
+    public int createBook(Book newBook) {
+        String sql = "INSERT INTO books VALUES (?,?,?,?,?,?,?,?)";
+        int insert = jdbcTemplate.update(sql,newBook.getISBN(),newBook.getTitle(),newBook.getPublisher()
+                    ,newBook.getPublication_year(),newBook.getSelling_price(),newBook.getCategory()
+                    ,newBook.getThreshold(),newBook.getCopies());
+        if(insert == 1)
+            log.info("New user added to DB: " + newBook);
+        return insert;
+    }
+
+    @Override
+    public int updateBook(String ISBN, Book newBook) {
+        String sql = "UPDATE books SET ISBN = ? , title = ?" +
+                " , publisher = ? , publication_year = ? , selling_price = ?" +
+                " , category = ? , threshold = ? , copies = ? WHERE ISBN = ?";
+        int update = jdbcTemplate.update(sql,newBook.getISBN(),newBook.getTitle(),newBook.getPublisher()
+                ,newBook.getPublication_year(),newBook.getSelling_price(),newBook.getCategory()
+                ,newBook.getThreshold(),newBook.getCopies(),ISBN);
         if(update==1)
-            log.info("User deleted successfully (id="+ ID + ")");
+            log.info("Book updated successfully (ISBN="+ ISBN + ")");
         return update;
     }
 
+    @Override
+    public int deleteBook(String ISBN) {
+        String sql = "DELETE FROM books WHERE ISBN = ?";
+        int delete = jdbcTemplate.update(sql,ISBN);
+        if(delete==1)
+            log.info("Book deleted successfully (ISBN="+ ISBN + ")");
+        return delete;
+    }
 
+    @Override
+    public int deleteUser(int ID) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        int delete = jdbcTemplate.update(sql,ID);
+        if(delete==1)
+            log.info("User deleted successfully (id="+ ID + ")");
+        return delete;
+    }
+
+    @Override
+    public Book getBookByISBN(String ISBN) {
+        String sql = "SELECT * FROM books WHERE ISBN = ?";
+        Book book = null;
+        try {
+            book = jdbcTemplate.queryForObject(sql,bookRowMapper,ISBN);
+        }catch(DataAccessException dataAccessException) {
+            log.error("Book not found (ISBN=" +ISBN+")");
+        }
+        return book;
+    }
 }

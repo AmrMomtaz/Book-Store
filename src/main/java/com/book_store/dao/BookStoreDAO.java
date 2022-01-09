@@ -1,6 +1,7 @@
 package com.book_store.dao;
 
 import com.book_store.model.Book;
+import com.book_store.model.Publisher;
 import com.book_store.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class BookStoreDAO implements DAO{
         int threshold = rs.getInt("threshold");
         int copies = rs.getInt("copies");
         return new Book(ISBN,title,publisher,publication_year,selling_price,
-                category,threshold,copies);
+                category,threshold,copies,null);
     };
 
     @Override
@@ -115,8 +116,19 @@ public class BookStoreDAO implements DAO{
         int insert = jdbcTemplate.update(sql,newBook.getISBN(),newBook.getTitle(),newBook.getPublisher()
                     ,newBook.getPublication_year(),newBook.getSelling_price(),newBook.getCategory()
                     ,newBook.getThreshold(),newBook.getCopies());
-        if(insert == 1)
-            log.info("New user added to DB: " + newBook);
+        if (insert != 1){
+            log.error("Insertion failed of book || ISBN " + newBook.getISBN());
+            return insert;
+        }
+        for (String author : newBook.getAuthors()){
+            sql = "INSERT INTO authors VALUES (?,?)";
+            insert = jdbcTemplate.update(sql,newBook.getISBN(),author);
+            if(insert != 1) {
+                log.error("Couldn't add all authors for book || ISBN = " + newBook.getISBN());
+                return insert;
+            }
+        }
+        log.info("New book added to DB || ISBN : " + newBook.getISBN());
         return insert;
     }
 
@@ -128,8 +140,22 @@ public class BookStoreDAO implements DAO{
         int update = jdbcTemplate.update(sql,newBook.getISBN(),newBook.getTitle(),newBook.getPublisher()
                 ,newBook.getPublication_year(),newBook.getSelling_price(),newBook.getCategory()
                 ,newBook.getThreshold(),newBook.getCopies(),ISBN);
-        if(update==1)
-            log.info("Book updated successfully (ISBN="+ ISBN + ")");
+        if (update != 1) {
+            log.error("Update failed of book || ISBN " + newBook.getISBN());
+            return update;
+        }
+        sql = "DELETE from authors WHERE ISBN = ?";
+        update = jdbcTemplate.update(sql,ISBN);
+        for (String author : newBook.getAuthors()){
+            sql = "INSERT INTO authors VALUES (?,?)";
+            update = jdbcTemplate.update(sql,newBook.getISBN(),author);
+            if(update != 1) {
+                log.error("Couldn't update all authors for book || ISBN = " + newBook.getISBN());
+                return update;
+            }
+        }
+        if(update == 1)
+            log.info("Book updated in DB || ISBN : " + newBook.getISBN());
         return update;
     }
 
@@ -161,5 +187,16 @@ public class BookStoreDAO implements DAO{
             log.error("Book not found (ISBN=" +ISBN+")");
         }
         return book;
+    }
+
+    @Override
+    public int createPublisher(Publisher newPublisher) {
+        return jdbcTemplate.update("INSERT INTO publishers VALUES (?,?,?)",
+                newPublisher.getName(),newPublisher.getAddress(),newPublisher.getPhonenumber());
+    }
+
+    @Override
+    public int deletePublisher(String publisherName) {
+        return jdbcTemplate.update("DELETE FROM publishers WHERE name = ?", publisherName);
     }
 }

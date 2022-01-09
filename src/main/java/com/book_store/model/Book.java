@@ -1,5 +1,7 @@
 package com.book_store.model;
 
+import java.util.List;
+
 public class Book {
     private String ISBN;
     private String title;
@@ -9,9 +11,10 @@ public class Book {
     private String category;
     private int threshold;
     private int copies;
+    List<String> authors;
 
     public Book(String ISBN, String title, String publisher, String publication_year,
-                int selling_price, String category, int threshold, int copies) {
+                int selling_price, String category, int threshold, int copies, List<String> authors) {
         this.ISBN = ISBN;
         this.title = title;
         this.publisher = publisher;
@@ -20,6 +23,7 @@ public class Book {
         this.category = category;
         this.threshold = threshold;
         this.copies = copies;
+        this.authors = authors;
     }
 
     public String getISBN() {
@@ -86,17 +90,26 @@ public class Book {
         this.copies = copies;
     }
 
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
                 "ISBN='" + ISBN + '\'' +
                 ", title='" + title + '\'' +
                 ", publisher='" + publisher + '\'' +
-                ", production_year='" + publication_year + '\'' +
+                ", publication_year='" + publication_year + '\'' +
                 ", selling_price=" + selling_price +
                 ", category='" + category + '\'' +
                 ", threshold=" + threshold +
                 ", copies=" + copies +
+                ", authors=" + authors +
                 '}';
     }
 }

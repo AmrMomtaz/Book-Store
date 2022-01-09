@@ -1,6 +1,7 @@
 package com.book_store.dao;
 
 import com.book_store.model.Book;
+import com.book_store.model.Publisher;
 import com.book_store.model.User;
 
 public interface DAO {
@@ -8,7 +9,6 @@ public interface DAO {
     /**
      * Login functions and signup
      */
-
     // It returns the user if it exists and null if the data entered is wrong (used in login)
     User login(String email,String password);
 
@@ -39,4 +39,8 @@ public interface DAO {
 
     // Gets book by ISBN
     Book getBookByISBN(String ISBN);
+
+    // Create and delete publisher
+    int createPublisher(Publisher newPublisher);
+    int deletePublisher(String publisherName);
 }

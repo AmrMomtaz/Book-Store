@@ -4,6 +4,8 @@ import com.book_store.model.Book;
 import com.book_store.model.Publisher;
 import com.book_store.model.User;
 
+import java.util.List;
+
 public interface DAO {
 
     /**
@@ -32,6 +34,18 @@ public interface DAO {
     int deleteBook(String ISBN);
 
     /**
+     *  Search function for books
+     */
+    List<Book> listBooks(int pageSize , int pageNumber); // List all books given the page size and number
+    List<Book> searchBookByISBN(String ISBN, int pageSize , int pageNumber);
+    List<Book> searchBookByTitle(String title , int pageSize , int pageNumber);
+    List<Book> searchBookByPublisher(String publisher, int pageSize , int pageNumber);
+    List<Book> searchBookByPublication_year(String publication_year, int pageSize , int pageNumber);
+    List<Book> searchBookByCategory(String category, int pageSize , int pageNumber);
+    List<Book> searchBooksByAuthor(String author, int pageSize , int pageNumber);
+
+
+    /**
      * Other functions (Mainly for testing)
      */
     // Deletes user by ID
@@ -43,4 +57,7 @@ public interface DAO {
     // Create and delete publisher
     int createPublisher(Publisher newPublisher);
     int deletePublisher(String publisherName);
+
+    // gets all the authors of a specific book ISBN
+    List<String> getAuthors(String ISBN);
 }

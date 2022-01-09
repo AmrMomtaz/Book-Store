@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootTest
 public class DaoTests {
@@ -48,5 +49,24 @@ public class DaoTests {
         System.out.println(dao.getBookByISBN("t"));
         Assertions.assertEquals(1,dao.deleteBook(test.getISBN()));
         Assertions.assertEquals(1,dao.deletePublisher("PUBLISHER_TEST"));
+    }
+
+    @Test
+    @DisplayName("Searching books")
+    void booksSearchingTests() {
+        Assertions.assertEquals(1,
+                dao.createPublisher(new Publisher("publisherTest","t","t")));
+        for (int i = 10; i < 20; i++) {
+            Assertions.assertEquals(1,dao.createBook(
+                    new Book(Integer.toString(i),"t","publisherTest","t",
+                            100,"science",50,200,
+                            Arrays.asList("author1","tt","ss"))));
+        }
+        List<Book> bookList = dao.searchBooksByAuthor("s",7,1);
+        for (Book book : bookList)
+            System.out.println(book);
+        for (int i = 10; i < 20; i++)
+            Assertions.assertEquals(1,dao.deleteBook(Integer.toString(i)));
+        Assertions.assertEquals(1,dao.deletePublisher("publisherTest"));
     }
 }

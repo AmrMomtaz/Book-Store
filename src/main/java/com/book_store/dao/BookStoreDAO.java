@@ -74,8 +74,9 @@ public class BookStoreDAO implements DAO{
         String category = rs.getString("category");
         int threshold = rs.getInt("threshold");
         int copies = rs.getInt("copies");
+        List<String> authors = getAuthors(ISBN);
         return new Book(ISBN,title,publisher,publication_year,selling_price,
-                category,threshold,copies,null);
+                category,threshold,copies,authors);
     };
 
     @Override
@@ -169,6 +170,49 @@ public class BookStoreDAO implements DAO{
     }
 
     @Override
+    public List<Book> listBooks(int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBookByISBN(String ISBN, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books WHERE ISBN LIKE ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,ISBN+"%" ,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBookByTitle(String title, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books WHERE title LIKE ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,title+"%" ,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBookByPublisher(String publisher, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books WHERE publisher LIKE ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,publisher+"%" ,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBookByPublication_year(String publication_year, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books WHERE publication_year LIKE ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,publication_year+"%" ,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBookByCategory(String category, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM books WHERE category LIKE ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,bookRowMapper,category+"%" ,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public List<Book> searchBooksByAuthor(String author, int pageSize, int pageNumber) {
+        String sql = "SELECT * FROM  books AS B WHERE B.ISBN IN " +
+                "(SELECT DISTINCT ISBN FROM authors AS A WHERE A.author_name LIKE ?)";
+        return jdbcTemplate.query(sql,bookRowMapper,author + "%");
+    }
+
+    @Override
     public int deleteUser(int ID) {
         String sql = "DELETE FROM users WHERE id = ?";
         int delete = jdbcTemplate.update(sql,ID);
@@ -198,5 +242,11 @@ public class BookStoreDAO implements DAO{
     @Override
     public int deletePublisher(String publisherName) {
         return jdbcTemplate.update("DELETE FROM publishers WHERE name = ?", publisherName);
+    }
+
+    @Override
+    public List<String> getAuthors(String ISBN) {
+        String sql = "SELECT author_name FROM authors WHERE ISBN = ?";
+        return jdbcTemplate.query(sql,(rs, rowNum) -> rs.getString("author_name"),ISBN);
     }
 }

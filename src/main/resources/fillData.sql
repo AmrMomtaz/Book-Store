@@ -173,13 +173,13 @@ insert into orders values(15,"550","2","13","2021-7-24");
 insert into orders values(15,"660","2","13","2021-7-24");
 
 /*credit card*/
-insert into credit_card values("5555555555554444",2023-12-24);
-insert into credit_card values("5555555555599444",2023-12-24);
-insert into credit_card values("5555555577554444",2023-12-24);
-insert into credit_card values("5555554455554444",2023-12-24);
-insert into credit_card values("5555555555124444",2024-12-24);
-insert into credit_card values("5555578555554444",2025-12-24);
-insert into credit_card values("5555596555554444",2026-12-24);
+insert into credit_card values("5555555555554444","2023-12-24");
+insert into credit_card values("5555555555599444","2023-12-24");
+insert into credit_card values("5555555577554444","2023-12-24");
+insert into credit_card values("5555554455554444","2023-12-24");
+insert into credit_card values("5555555555124444","2024-12-24");
+insert into credit_card values("5555578555554444","2025-12-24");
+insert into credit_card values("5555596555554444","2026-12-24");
 
 
 

@@ -43,7 +43,6 @@
                 </Label>
                 <Label fx:id="email" layoutX="84.0" layoutY="54.0" prefHeight="18.0" prefWidth="211.0" />
                 <Label fx:id="username" layoutX="80.0" layoutY="22.0" prefHeight="18.0" prefWidth="172.0" />
-                <Label fx:id="purchaseCount" layoutX="372.0" layoutY="74.0" prefHeight="18.0" prefWidth="81.0" />
                 <Button layoutX="405.0" layoutY="34.0" mnemonicParsing="false" onAction="#promoteUser" text="Promote user" />
             </children>
         </AnchorPane>

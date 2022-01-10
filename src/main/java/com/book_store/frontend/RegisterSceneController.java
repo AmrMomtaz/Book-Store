@@ -1,5 +1,6 @@
 package com.book_store.frontend;
 
+import com.book_store.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,13 +23,26 @@ public class RegisterSceneController {
     @FXML
     private PasswordField password;
 
+
     @FXML
     public void CreateAccount(ActionEvent event){
-        if(validateFields()){
+        if(invalidateFields()){
             errorMessage.setText("please fill all fields");
         }
+        else if(frontEndDAO.dao.checkEmailExists(email.getText())){
+            errorMessage.setText("an account with the same email already exists");
+        }
         else{
-            //take the corresponding action
+            User user = new User(
+                    username.getText(),
+                    password.getText(),
+                    firstName.getText(),
+                    lastName.getText(),
+                    email.getText(),
+                    phoneNumber.getText(),
+                    shippingLocation.getText());
+            frontEndDAO.dao.createUser(user);
+            System.out.println(user);
             errorMessage.setText("all good");
         }
     }
@@ -40,7 +54,7 @@ public class RegisterSceneController {
         stage.show();
     }
 
-    private boolean validateFields(){
+    private boolean invalidateFields(){
         return  firstName.getText().isEmpty() ||
                 lastName.getText().isEmpty() ||
                 username.getText().isEmpty() ||

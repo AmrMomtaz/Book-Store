@@ -30,6 +30,8 @@ public class LogInSceneController {
     @FXML
     private PasswordField password;
 
+    public User user;
+
     @FXML
     public void logIn(ActionEvent event) throws IOException {
         if(email.getText().isEmpty())
@@ -37,12 +39,12 @@ public class LogInSceneController {
         else if(password.getText().isEmpty())
             errorMessage.setText("Password field cannot be empty");
         else{
-           User user = frontEndDAO.dao.login(email.getText(),password.getText());
+           user = frontEndDAO.dao.login(email.getText(),password.getText());
            if(user == null){
                errorMessage.setText("Invalid username or password");
            }
            else{
-
+               System.out.println(user);
                SwitchToWelcomeScene(event);
            }
         }
@@ -55,7 +57,12 @@ public class LogInSceneController {
         stage.show();
     }
     private void SwitchToWelcomeScene(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/welcome.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/welcome.fxml"));
+        Parent root = loader.load();
+        WelcomeScreenController welcomeController = loader.getController();
+        System.out.println("in login: " +user);
+        welcomeController.setUser(user);
+        welcomeController.start();
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.book_store.frontend.updateUserInfoController">
     <children>
-        <Button layoutX="193.0" layoutY="599.0" mnemonicParsing="false" onAction="#CreateAccount" prefHeight="26.0" prefWidth="214.0" text="save changes">
+        <Button layoutX="193.0" layoutY="599.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="26.0" prefWidth="214.0" text="save changes">
             <font>
                 <Font name="System Bold Italic" size="16.0" />
             </font>

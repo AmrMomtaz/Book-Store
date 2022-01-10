@@ -155,6 +155,11 @@ public class BookStoreDAO implements DAO{
     }
 
     @Override
+    public int updateUser(User user) {
+        return 0;
+    }
+
+    @Override
     public int createBook(Book newBook) {
         String sql = "INSERT INTO books VALUES (?,?,?,?,?,?,?,?)";
         int insert = jdbcTemplate.update(sql,newBook.getISBN(),newBook.getTitle(),newBook.getPublisher()
@@ -283,6 +288,11 @@ public class BookStoreDAO implements DAO{
     @Override
     public int confirmPurchase(CreditCard creditCard, int userID) {
         return 0;
+    }
+
+    @Override
+    public boolean deleteCartItem(ShoppingCart item) {
+        return false;
     }
 
     @Override

@@ -1,8 +1,14 @@
 package com.book_store.frontend;
 
+import com.book_store.model.User;
 import javafx.event.ActionEvent;
 
 public class usersController {
+    private User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void next(ActionEvent event) {
     }
 
@@ -17,4 +23,5 @@ public class usersController {
 
     public void homePage(ActionEvent event) {
     }
+
 }

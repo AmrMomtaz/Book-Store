@@ -84,14 +84,20 @@ public class DaoTests {
                 100,"science",50,200, Arrays.asList("author1","author2","author3"));
         Book book2 = new Book("tt","t","PUBLISHER_TEST","t",
                 100,"science",50,200, Arrays.asList("author1","author2","author3"));
+        Book book3 = new Book("ttt","t","PUBLISHER_TEST","t",
+                100,"science",50,200, Arrays.asList("author1","author2","author3"));
         Assertions.assertEquals(1,dao.createBook(book1));
         Assertions.assertEquals(1,dao.createBook(book2));
+        Assertions.assertEquals(1,dao.createBook(book3));
 
         Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
                 user1.getID(),book1.getISBN(),10)
         ));
         Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
                 user1.getID(),book2.getISBN(),20)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user1.getID(),book3.getISBN(),30)
         ));
         Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
                 user2.getID(),book1.getISBN(),10)
@@ -106,6 +112,16 @@ public class DaoTests {
                 user3.getID(),book2.getISBN(),20)
         ));
 
+        List<ShoppingCart> shoppingCartList = dao.listItemsInShoppingCart(user1.getID(),2,2);
+        for(ShoppingCart item : shoppingCartList)
+            System.out.println(item);
+
+
+
+        Assertions.assertEquals(1,dao.deleteCartItem(user3.getID(),book1.getISBN()));
+        Assertions.assertEquals(1,dao.deleteCartItem(user3.getID(),book2.getISBN()));
+        Assertions.assertEquals(2,dao.userLogout(user2.getID()));
+        Assertions.assertEquals(3,dao.userLogout(user1.getID()));
 
         Assertions.assertEquals(1,dao.deleteBook("t"));
         Assertions.assertEquals(1,dao.deleteBook("tt"));
@@ -114,6 +130,30 @@ public class DaoTests {
         Assertions.assertEquals(1,dao.deleteUser(user2.getID()));
         Assertions.assertEquals(1,dao.deleteUser(user3.getID()));
         Assertions.assertEquals(1,dao.deleteCreditCard("test"));
+
+    }
+
+    @Test
+    @DisplayName("User update tests")
+    void userUpdateTests(){
+        User user1 = new User("t","t","t","t","t","t","t");
+        User user2 = new User("t","t","t","t","tt","t","t");
+        User user3 = new User("t","t","t","t","ttt","t","t");
+        Assertions.assertEquals(1,dao.createUser(user1));
+        Assertions.assertEquals(1,dao.createUser(user2));
+        Assertions.assertEquals(1,dao.createUser(user3));
+
+        List<User> customers = dao.listCustomers(2,2);
+        for (User customer : customers)
+            System.out.println(customer);
+
+        user1.setUsername("New User Name");
+        dao.updateUser(user1);
+        dao.promoteUser(user1);
+
+        Assertions.assertEquals(1,dao.deleteUser(user1.getID()));
+        Assertions.assertEquals(1,dao.deleteUser(user2.getID()));
+        Assertions.assertEquals(1,dao.deleteUser(user3.getID()));
 
     }
 }

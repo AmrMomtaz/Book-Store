@@ -76,8 +76,8 @@ public interface DAO {
     List<User> listCustomers(int pageSize , int pageNumber);
 
     // This function promote users
-    int promoteUser(int userID);
-    
+    int promoteUser(User user);
+
 
     /**
      * Other functions (utils functions)

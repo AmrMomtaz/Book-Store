@@ -164,8 +164,10 @@ public class BookStoreDAO implements DAO{
 
     @Override
     public int updateUser(User user) {
-        //TODO
-        return 0;
+        return jdbcTemplate.update("UPDATE users SET username = ? , password = ?," +
+                "first_name = ? , last_name = ? , email = ? , phonenumber = ? , shipping_address = ? WHERE ID = ?",
+                user.getUsername(),user.getPassword(),user.getFirst_name(),user.getLast_name(),user.getEmail(),
+                user.getPhonenumber(),user.getShipping_address(),user.getID());
     }
 
     @Override
@@ -310,20 +312,20 @@ public class BookStoreDAO implements DAO{
 
     @Override
     public int userLogout(int userID) {
-
-        return 0;
+        return jdbcTemplate.update("DELETE FROM shopping_cart WHERE user_ID = ?" , userID);
     }
 
     @Override
     public List<User> listCustomers(int pageSize, int pageNumber) {
-        return null;
+        return jdbcTemplate.query("SELECT * FROM users WHERE type = ? LIMIT ?,?",
+                userRowMapper,"customer",(pageNumber-1)*pageSize,pageSize);
     }
 
     @Override
-    public int promoteUser(int userID) {
-        return 0;
+    public int promoteUser(User user) {
+        user.setType("manager");
+        return jdbcTemplate.update("UPDATE users SET type = ? WHERE ID = ?","manager",user.getID());
     }
-
 
     @Override
     public int deleteUser(int ID) {
@@ -378,6 +380,5 @@ public class BookStoreDAO implements DAO{
     public Integer getBookPrice(String ISBN) {
         String sql = "SELECT selling_price FROM books WHERE ISBN = ?";
         return jdbcTemplate.queryForObject(sql,(rs, rowNum) -> rs.getInt("selling_price"),ISBN);
-
     }
 }

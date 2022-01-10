@@ -89,34 +89,43 @@ public class BookStoreDAO implements DAO{
         String ISBN = rs.getString("ISBN");
         String title = rs.getString("title");
         String publisher = rs.getString("publisher");
-        int selling_price = rs.getInt("selling_price");
-        int sold_quantity= rs.getInt("sold_quantity");
+        int selling_price = rs.getInt("price");
+        int sold_quantity= rs.getInt("count");
         return new BookSales(ISBN,title,publisher,selling_price,sold_quantity);
     };
 
     private final RowMapper<TopFiveCustomers> customerRowMapper = (rs, rowNum)-> {
         int ID = rs.getInt("ID");
         String username = rs.getString("username");
-        String first_name = rs.getString("first_name");
-        String last_name = rs.getString("last_name");
         String email = rs.getString("email");
         String phonenumber = rs.getString("phonenumber");
         String shipping_address = rs.getString("shipping_address");
-        String purchase_quantity = rs.getString("purchase_quantity");
-        TopFiveCustomers customer = new TopFiveCustomers(ID,username,first_name
-                ,last_name,email,phonenumber,shipping_address,purchase_quantity);
+        int price = rs.getInt("price");
+        int purchase_quantity=rs.getInt("count");
+        TopFiveCustomers customer = new TopFiveCustomers(ID,username,email,phonenumber,shipping_address,purchase_quantity,price);
         return customer;
     };
     public List<BookSales>bookSalesPrevMonth(){
-        String sql="";
+        String sql="SELECT ISBN,title,publisher,sum(price)as price,sum(count)as count"+
+        " FROM orders natural join books"+
+        " WHERE  date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW()"+
+        " group by ISBN";
         return jdbcTemplate.query(sql,bookReportRowMapper);
     }
     public List<BookSales>topTenBooks(){
-        String sql="";
+        String sql="SELECT ISBN,title,publisher,sum(price)as price,sum(count)as count\n" +
+                "FROM orders natural join books\n" +
+                "WHERE  date BETWEEN DATE_SUB(NOW(), INTERVAL 90 DAY) AND NOW()\n" +
+                "group by ISBN order by count desc\n" +
+                "LIMIT 10\n";
         return jdbcTemplate.query(sql,bookReportRowMapper);
     }
     public List<TopFiveCustomers>topFiveCustomers(){
-        String sql="";
+        String sql="SELECT user_ID as ID,username,email,phonenumber,shipping_address,sum(price)as price,sum(count)as count\n" +
+                "FROM orders  join users ON(ID=user_ID)\n" +
+                "WHERE  date BETWEEN DATE_SUB(NOW(), INTERVAL 90 DAY) AND NOW()\n" +
+                "group by user_ID order by price desc\n" +
+                "LIMIT 5 \n";
         return jdbcTemplate.query(sql,customerRowMapper);
     }
 

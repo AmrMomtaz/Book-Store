@@ -1,5 +1,7 @@
 package com.book_store.dao;
 
+import com.book_store.Report_services.BookSales;
+import com.book_store.Report_services.TopFiveCustomers;
 import com.book_store.model.*;
 
 import java.util.List;
@@ -44,7 +46,9 @@ public interface DAO {
     List<Book> searchBookByPublication_year(String publication_year, int pageSize , int pageNumber);
     List<Book> searchBookByCategory(String category, int pageSize , int pageNumber);
     List<Book> searchBooksByAuthor(String author, int pageSize , int pageNumber);
-
+    List<BookSales>bookSalesPrevMonth();
+    List<BookSales>topTenBooks();
+    List<TopFiveCustomers>topFiveCustomers();
     /**
      *  Handling shopping cart table
      */

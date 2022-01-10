@@ -11,7 +11,7 @@ insert into publishers values("Ahmed","Agamy","01285518669");
 insert into publishers values("Anthipo","Agamy","01285518669");
 insert into publishers values("Soly","Agamy","01285518669");
 
- /* books */
+/* books */
 insert into books values("111","Title1","Radwan","1980",50,"comedia","60","500");
 insert into books values("222","Title2","Radwan","2000",50,"politics","60","600");
 insert into books values("333","Title3","Radwan","1985",50,"law","60","100");
@@ -149,24 +149,28 @@ insert into orders values(3,"333","4","17","2021-12-25");
 insert into orders values(3,"101","2","3","2021-12-24");
 insert into orders values(3,"400","2","13","2021-12-24");
 insert into orders values(4,"111","2","15","2021-12-24");
-insert into orders values(4,"400","2","13","2021-12-24");
+insert into orders values(4,"440","2","13","2021-12-24");
 insert into orders values(5,"111","2","12","2021-12-23");
 insert into orders values(6,"200","7","5","2021-12-21");
-insert into orders values(6,"404","2","12","2021-12-24");
-insert into orders values(7,"202","2","4","2021-12-24");
-insert into orders values(8,"400","2","13","2021-12-24");
-insert into orders values(11,"404","2","13","2021-11-24");
+insert into orders values(6,"404","14","12","2021-12-24");
+insert into orders values(7,"800","2","4","2021-12-24");
+insert into orders values(8,"900","15","13","2021-12-24");
+insert into orders values(11,"220","7","13","2021-11-24");
 insert into orders values(12,"606","2","13","2021-11-24");
 insert into orders values(15,"707","2","13","2021-11-24");
 insert into orders values(17,"808","2","13","2021-11-24");
 insert into orders values(14,"909","2","13","2021-11-24");
 insert into orders values(16,"707","2","13","2021-11-24");
 insert into orders values(12,"101","2","13","2021-10-24");
-insert into orders values(16,"202","2","13","2021-10-24");
+insert into orders values(16,"700","2","13","2021-10-24");
 insert into orders values(14,"300","2","13","2021-11-24");
-insert into orders values(13,"303","2","13","2021-10-24");
-insert into orders values(15,"505","2","13","2021-12-24");
-
+insert into orders values(13,"202","2","13","2021-10-24");
+insert into orders values(15,"100","2","13","2021-12-24");
+insert into orders values(14,"101","2","13","2021-9-24");
+insert into orders values(13,"707","2","13","2021-8-24");
+insert into orders values(15,"505","2","13","2021-7-24");
+insert into orders values(15,"550","2","13","2021-7-24");
+insert into orders values(15,"660","2","13","2021-7-24");
 
 /*credit card*/
 insert into credit_card values("5555555555554444",2023-12-24);

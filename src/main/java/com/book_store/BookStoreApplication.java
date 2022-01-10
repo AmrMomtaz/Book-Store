@@ -17,17 +17,28 @@ import java.io.FileNotFoundException;
 @SpringBootApplication
 public class BookStoreApplication {
     private static BookStoreDAO dbo;
-    private static ReportGenerator reportGenerator=new ReportGenerator(dbo);
+    private static ReportGenerator reportGenerator;
 
     public static DAO dao;
 
     public BookStoreApplication(DAO Dao){
         dao = Dao;
     }
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws JRException, FileNotFoundException {
+       /* */
         SpringApplication.run(BookStoreApplication.class, args);
         frontEndDAO.dao = dao;
+        reportGenerator=new ReportGenerator(dao);
+        reportGenerator.generateBookSalesReport();
+        reportGenerator.generateTopTenBookSalesReport();
+        reportGenerator.generateFiveCustomersReport();
         Application.launch(Main.class,args);
+
+        System.out.println(dao);
+
+       //
+
     }
 
 }

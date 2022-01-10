@@ -1,6 +1,7 @@
 package com.book_store.Report_services;
 
 import com.book_store.dao.BookStoreDAO;
+import com.book_store.dao.DAO;
 import com.book_store.model.Book;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -18,9 +19,9 @@ import java.util.Map;
 public class ReportGenerator {
 
 
-    BookStoreDAO bookStoreDAO;
+    DAO bookStoreDAO;
 
-    public ReportGenerator(BookStoreDAO bookStoreDAO) {
+    public ReportGenerator(DAO bookStoreDAO) {
         this.bookStoreDAO = bookStoreDAO;
     }
 
@@ -37,7 +38,7 @@ public class ReportGenerator {
     }
     public String generateTopTenBookSalesReport() throws FileNotFoundException, JRException {
         List<BookSales>books=bookStoreDAO.topTenBooks();
-        File file= ResourceUtils.getFile("classpath:BookSales.jrxml");
+        File file= ResourceUtils.getFile("classpath:TopTenBooks.jrxml");
         JasperReport jasperReport= JasperCompileManager.compileReport(file.getAbsolutePath());
         JRBeanCollectionDataSource dataSource=new JRBeanCollectionDataSource(books);
         Map<String,Object> map=new HashMap<>();

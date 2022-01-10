@@ -1,10 +1,19 @@
 package com.book_store.dao;
 
+
 import com.book_store.model.*;
+
+import com.book_store.Report_services.BookSales;
+import com.book_store.Report_services.TopFiveCustomers;
+import com.book_store.model.Book;
+import com.book_store.model.Publisher;
+import com.book_store.model.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -77,6 +86,41 @@ public class BookStoreDAO implements DAO{
                 category,threshold,copies,authors);
     };
 
+    private final RowMapper<BookSales> bookReportRowMapper = (rs, rowNum)-> {
+        String ISBN = rs.getString("ISBN");
+        String title = rs.getString("title");
+        String publisher = rs.getString("publisher");
+        int selling_price = rs.getInt("selling_price");
+        int sold_quantity= rs.getInt("sold_quantity");
+        return new BookSales(ISBN,title,publisher,selling_price,sold_quantity);
+    };
+
+    private final RowMapper<TopFiveCustomers> customerRowMapper = (rs, rowNum)-> {
+        int ID = rs.getInt("ID");
+        String username = rs.getString("username");
+        String first_name = rs.getString("first_name");
+        String last_name = rs.getString("last_name");
+        String email = rs.getString("email");
+        String phonenumber = rs.getString("phonenumber");
+        String shipping_address = rs.getString("shipping_address");
+        String purchase_quantity = rs.getString("purchase_quantity");
+        TopFiveCustomers customer = new TopFiveCustomers(ID,username,first_name
+                ,last_name,email,phonenumber,shipping_address,purchase_quantity);
+        return customer;
+    };
+    public List<BookSales>bookSalesPrevMonth(){
+        String sql="";
+        return jdbcTemplate.query(sql,bookReportRowMapper);
+    }
+    public List<BookSales>topTenBooks(){
+        String sql="";
+        return jdbcTemplate.query(sql,bookReportRowMapper);
+    }
+    public List<TopFiveCustomers>topFiveCustomers(){
+        String sql="";
+        return jdbcTemplate.query(sql,customerRowMapper);
+    }
+
     @Override
     public User login(String email, String password) {
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -132,6 +176,10 @@ public class BookStoreDAO implements DAO{
         return insert;
     }
 
+    public List<Book>getAllBooks(){
+        String sql= "SELECT * FROM books;";
+        return jdbcTemplate.query(sql,bookRowMapper);
+    }
     @Override
     public int updateBook(String ISBN, Book newBook) {
         String sql = "UPDATE books SET ISBN = ? , title = ?" +

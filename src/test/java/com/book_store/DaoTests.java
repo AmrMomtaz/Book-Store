@@ -71,7 +71,8 @@ public class DaoTests {
     @Test
     @DisplayName("Testing shopping cart and authentication")
     void shoppingCartTests(){
-        Assertions.assertEquals(1,dao.createCreditCard(new CreditCard("test","test")));
+        CreditCard creditCard = new CreditCard("test","test");
+        Assertions.assertEquals(1,dao.createCreditCard(creditCard));
         User user1 = new User("t","t","t","t","t","t","t");
         User user2 = new User("t","t","t","t","tt","t","t");
         User user3 = new User("t","t","t","t","ttt","t","t");
@@ -116,12 +117,12 @@ public class DaoTests {
         for(ShoppingCart item : shoppingCartList)
             System.out.println(item);
 
+        Assertions.assertEquals(1,dao.confirmPurchase(creditCard,user1.getID()));
 
 
         Assertions.assertEquals(1,dao.deleteCartItem(user3.getID(),book1.getISBN()));
         Assertions.assertEquals(1,dao.deleteCartItem(user3.getID(),book2.getISBN()));
         Assertions.assertEquals(2,dao.userLogout(user2.getID()));
-        Assertions.assertEquals(3,dao.userLogout(user1.getID()));
 
         Assertions.assertEquals(1,dao.deleteBook("t"));
         Assertions.assertEquals(1,dao.deleteBook("tt"));
@@ -154,6 +155,5 @@ public class DaoTests {
         Assertions.assertEquals(1,dao.deleteUser(user1.getID()));
         Assertions.assertEquals(1,dao.deleteUser(user2.getID()));
         Assertions.assertEquals(1,dao.deleteUser(user3.getID()));
-
     }
 }

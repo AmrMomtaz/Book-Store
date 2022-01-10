@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -296,13 +298,39 @@ public class BookStoreDAO implements DAO{
         },userID,(pageNumber-1)*pageSize,pageSize);
     }
 
+    private List<ShoppingCart> listItemsInShoppingCart(int userID ) {
+        String sql = "SELECT * FROM shopping_cart WHERE user_ID = ?";
+        return jdbcTemplate.query(sql,(rs,rowNum)->{
+            int user_id = rs.getInt("user_ID");
+            String ISBN = rs.getString("ISBN");
+            int count = rs.getInt("count");
+            int price = rs.getInt("price");
+            ShoppingCart shoppingCart = new ShoppingCart(user_id,ISBN,count);
+            shoppingCart.setPrice(price);
+            return shoppingCart;
+        },userID);
+    }
     @Override
     public int confirmPurchase(CreditCard creditCard, int userID) {
-        CreditCard verifiedCard = jdbcTemplate.queryForObject("SELECT * FROM credit_card WHERE " +
-                "number = ? AND date = ?" ,
-                (rs,rowNum)-> new CreditCard(rs.getString("number"),rs.getString("date")));
-        System.out.println(verifiedCard);
-        return 0;
+        CreditCard verifiedCard = null;
+        try{
+            verifiedCard = jdbcTemplate.queryForObject("SELECT * FROM credit_card WHERE " +
+                            "number = ?" ,(rs,rowNum)-> new CreditCard(rs.getString("number"),rs.getString("date")),
+                    creditCard.getNumber());
+        }catch (Exception e){
+            log.error("Invalid credit card || " + creditCard);
+        }
+        if(verifiedCard==null)
+            return -1;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        List<ShoppingCart> shoppingCartList = listItemsInShoppingCart(userID);
+        int insert = 0;
+        for (ShoppingCart item : shoppingCartList)
+            insert += jdbcTemplate.update("INSERT INTO orders VALUES (?,?,?,?,?)",
+                    item.getUserID(),item.getISBN(),item.getCount(),item.getPrice(),dtf.format(now));
+        userLogout(userID);
+        return insert == shoppingCartList.size() ? 1 : 0;
     }
 
     @Override

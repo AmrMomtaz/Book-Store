@@ -87,16 +87,15 @@
       <Button layoutX="215.0" layoutY="72.0" mnemonicParsing="false" onAction="#checkout" text="Checkout" />
       <AnchorPane fx:id="manager" layoutY="-1.0" prefHeight="169.0" prefWidth="200.0">
          <children>
-            <Button fx:id="adminReport" layoutX="52.0" layoutY="103.0" mnemonicParsing="false" onAction="#reportAnalysis" text="Report analysis" />
-            <Button fx:id="adminAddBook" layoutX="47.0" layoutY="40.0" mnemonicParsing="false" onAction="#addBook" text="Add" />
-            <Button fx:id="adminShowUsers" layoutX="52.0" layoutY="136.0" mnemonicParsing="false" onAction="#showUsers" prefHeight="26.0" prefWidth="96.0" text="Show users" />
+            <Button fx:id="adminReport" layoutX="52.0" layoutY="102.0" mnemonicParsing="false" onAction="#reportAnalysis" text="Report analysis" />
+            <Button fx:id="adminAddBook" layoutX="52.0" layoutY="40.0" mnemonicParsing="false" onAction="#addBook" text="Add" />
+            <Button fx:id="adminShowUsers" layoutX="52.0" layoutY="135.0" mnemonicParsing="false" onAction="#showUsers" prefHeight="26.0" prefWidth="96.0" text="Show users" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="20.0" prefHeight="18.0" prefWidth="147.0" text="Books manager">
                <font>
                   <Font name="System Bold Italic" size="12.0" />
                </font>
             </Label>
             <Button fx:id="adminModifyBook" layoutX="96.0" layoutY="40.0" mnemonicParsing="false" onAction="#modifyBook" text="modify" />
-            <Button layoutX="52.0" layoutY="72.0" mnemonicParsing="false" onAction="#confirmOrders" prefHeight="26.0" prefWidth="96.0" text="Confirm orders" />
          </children>
       </AnchorPane>
       <Button layoutX="439.0" layoutY="14.0" mnemonicParsing="false" onAction="#updateUserInfo" text="update info">
@@ -104,5 +103,10 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Button>
+      <Label fx:id="errorMessage" layoutX="271.0" layoutY="160.0" prefHeight="18.0" prefWidth="318.0" textFill="RED">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

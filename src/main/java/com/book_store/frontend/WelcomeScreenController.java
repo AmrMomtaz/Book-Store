@@ -1,5 +1,6 @@
 package com.book_store.frontend;
 
+import com.book_store.Report_services.ReportGenerator;
 import com.book_store.model.Book;
 import com.book_store.model.ShoppingCart;
 import com.book_store.model.User;
@@ -17,13 +18,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JRException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class WelcomeScreenController{
     private final int pageSize = 10;
+    @FXML
+    public Label errorMessage;
     @FXML
     private AnchorPane manager,bookInfoContainer;
     @FXML
@@ -73,7 +78,7 @@ public class WelcomeScreenController{
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 int index = booksList.getSelectionModel().getSelectedIndex();
-                if(books.size()>index){
+                if(books.size()>index && index>=0){
                     book = books.get(index);
                     name.setText(book.getTitle());
                     category.setText(book.getCategory());
@@ -140,14 +145,16 @@ public class WelcomeScreenController{
             case "publication year":
                 books = frontEndDAO.dao.searchBookByPublication_year(searchField.getText(), pageSize, page);
                 break;
-            case "selling price":
+            case "category":
                 books = frontEndDAO.dao.searchBookByCategory(searchField.getText(), pageSize, page);
                 break;
+
         }
         booksList.getItems().remove(0,10);
         booksList.getItems().addAll(booksToArray());
     }
     public void logout(ActionEvent event) throws IOException {
+        frontEndDAO.dao.userLogout(user.getID());
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -156,13 +163,21 @@ public class WelcomeScreenController{
 
     public void addToCart(ActionEvent event) {
         if(!buyCount.getText().isEmpty() && buyCount.getText().matches("-?(0|[1-9]\\d*)")){
-            ShoppingCart cartItem = new ShoppingCart(user.getID(),book.getISBN(),Integer.parseInt(buyCount.getText()));
+            if(!(Integer.parseInt(buyCount.getText())>book.getThreshold())) {
+            ShoppingCart cartItem = new ShoppingCart(user.getID(), book.getISBN(), Integer.parseInt(buyCount.getText()));
             frontEndDAO.dao.addItemInShoppingCart(cartItem);
-        }
+            }
+            else{
+                errorMessage.setText("number of purchased books is bigger than the in-stock value");
+            }
+            }
     }
 
-    public void reportAnalysis(ActionEvent event) {
-
+    public void reportAnalysis(ActionEvent event) throws JRException, FileNotFoundException {
+        ReportGenerator reportGenerator = new ReportGenerator(frontEndDAO.dao);
+        reportGenerator.generateBookSalesReport();
+        reportGenerator.generateFiveCustomersReport();
+        reportGenerator.generateBookSalesReport();
     }
 
     public void addBook(ActionEvent event) throws IOException {
@@ -180,19 +195,23 @@ public class WelcomeScreenController{
         Parent root = loader.load();
         usersController usersController = loader.getController();
         usersController.setUser(user);
+        usersController.start();
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void modifyBook(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifyBook.fxml"));
-        Parent root = loader.load();
-        modifyBookController modifyBookController = loader.getController();
-        modifyBookController.setParameters(user,book);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        if( !(book==null) && !(user==null) ) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifyBook.fxml"));
+            Parent root = loader.load();
+            modifyBookController modifyBookController = loader.getController();
+            modifyBookController.setParameters(user, book);
+            modifyBookController.start();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
     }
 
     public void checkout(ActionEvent event) throws IOException {
@@ -211,6 +230,7 @@ public class WelcomeScreenController{
         Parent root = loader.load();
         confirmOrdersController confirmOrdersController = loader.getController();
         confirmOrdersController.setUser(user);
+        confirmOrdersController.start();
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

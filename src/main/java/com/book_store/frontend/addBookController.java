@@ -22,7 +22,7 @@ public class addBookController {
     @FXML
     public TextArea authors;
     @FXML
-    public DatePicker publicationYear;
+    public TextField publicationYear;
     @FXML
     public TextField sellingPrice;
     @FXML
@@ -32,8 +32,14 @@ public class addBookController {
 
     private User user;
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
+        category.getItems().add("Science");
+        category.getItems().add("Art");
+        category.getItems().add("Religion");
+        category.getItems().add("History");
+        category.getItems().add("Geography");
     }
 
 
@@ -48,9 +54,9 @@ public class addBookController {
             for (int i = 0; i < authArray.length; i++) {
                 authors.add(authArray[i]);
             }
-            System.out.println(publicationYear.getValue().toString());
+            System.out.println(publicationYear.getText());
             System.out.println(category.getValue().toString());
-            Book book = new Book(ispn.getText(),title.getText(),publisher.getText(),publicationYear.getValue().toString()
+            Book book = new Book(ispn.getText(),title.getText(),publisher.getText(),publicationYear.getText()
                     ,Integer.parseInt(sellingPrice.getText()),category.getValue().toString(),Integer.parseInt(threshold.getText()),
                     Integer.parseInt(copies.getText()),authors);
             frontEndDAO.dao.createBook(book);
@@ -78,10 +84,13 @@ public class addBookController {
                 ispn.getText().isEmpty() ||
                 publisher.getText().isEmpty() ||
                 authors.getText().isEmpty() ||
-                publicationYear.getValue()==null||
+                publicationYear.getText().isEmpty()||
                 sellingPrice.getText().isEmpty() ||
                 !sellingPrice.getText().matches("-?(0|[1-9]\\d*)")||
                 category.getValue()==null;
     }
 
+    public void homePage(ActionEvent event) throws IOException {
+        SwitchToWelcomeScreen(event);
+    }
 }

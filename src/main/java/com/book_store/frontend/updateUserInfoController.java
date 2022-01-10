@@ -49,16 +49,25 @@ public class updateUserInfoController {
             errorMessage.setText("an account with the same email already exists");
         }
         else{
-            User user = new User(
+            /*User user = new User(
                     username.getText(),
                     password.getText(),
                     firstName.getText(),
                     lastName.getText(),
                     email.getText(),
                     phoneNumber.getText(),
-                    shippingLocation.getText());
+                    shippingLocation.getText());*/
+            user.setUsername(username.getText());
+            user.setPassword(password.getText());
+            user.setFirst_name(firstName.getText());
+            user.setLast_name(lastName.getText());
+            user.setEmail(email.getText());
+            user.setPhonenumber(phoneNumber.getText());
+            user.setShipping_address(shippingLocation.getText());
+
             frontEndDAO.dao.updateUser(user);
             System.out.println(user);
+            //this.user = user;
             errorMessage.setText("all good");
             SwitchToWelcomeScreen(event);
         }

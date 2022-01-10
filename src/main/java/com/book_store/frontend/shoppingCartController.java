@@ -44,9 +44,9 @@ public class shoppingCartController {
         booksList.getItems().addAll(ShoppingCartToArray());
         booksList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1){
                 int index = booksList.getSelectionModel().getSelectedIndex();
-                if(shoppingcart.size()>index){
+                if(shoppingcart.size()>index && index>=0){
                     cartItem = shoppingcart.get(index);
                     ISBN.setText(cartItem.getISBN());
                     price.setText(Integer.toString(cartItem.getPrice()));
@@ -94,6 +94,7 @@ public class shoppingCartController {
     }
 
     public void logout(javafx.event.ActionEvent event) throws IOException {
+        frontEndDAO.dao.userLogout(user.getID());
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -101,8 +102,12 @@ public class shoppingCartController {
     }
 
     public void removeBook(javafx.event.ActionEvent event) {
-        //if(cartItem!=null)
-            //frontEndDAO.dao.deleteCartItem(cartItem);
+        if(cartItem!=null) {
+            frontEndDAO.dao.deleteCartItem(cartItem.getUserID(), cartItem.getISBN());
+            shoppingcart = frontEndDAO.dao.listItemsInShoppingCart(user.getID(),pageSize, Integer.parseInt(pageNumber.getText()));
+            booksList.getItems().remove(0,10);
+            booksList.getItems().addAll(ShoppingCartToArray());
+        }
     }
 
     public void homePage(javafx.event.ActionEvent event) throws IOException {
@@ -128,6 +133,9 @@ public class shoppingCartController {
             }
             else{
                 errorMessage.setText("transaction completed successfully");
+                shoppingcart = frontEndDAO.dao.listItemsInShoppingCart(user.getID(),pageSize, Integer.parseInt(pageNumber.getText()));
+                booksList.getItems().remove(0,10);
+                booksList.getItems().addAll(ShoppingCartToArray());
             }
         }
     }

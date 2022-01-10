@@ -13,6 +13,8 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.setTitle("Book store");
         stage.show();
     }
 }

@@ -326,9 +326,13 @@ public class BookStoreDAO implements DAO{
         LocalDateTime now = LocalDateTime.now();
         List<ShoppingCart> shoppingCartList = listItemsInShoppingCart(userID);
         int insert = 0;
-        for (ShoppingCart item : shoppingCartList)
+        for (ShoppingCart item : shoppingCartList) {
             insert += jdbcTemplate.update("INSERT INTO orders VALUES (?,?,?,?,?)",
-                    item.getUserID(),item.getISBN(),item.getCount(),item.getPrice(),dtf.format(now));
+                    item.getUserID(), item.getISBN(), item.getCount(), item.getPrice(), dtf.format(now));
+            Book book = getBookByISBN(item.getISBN());
+            book.setCopies(book.getCopies()-item.getCount());
+            updateBook(book.getISBN(),book);
+        }
         userLogout(userID);
         return insert == shoppingCartList.size() ? 1 : 0;
     }

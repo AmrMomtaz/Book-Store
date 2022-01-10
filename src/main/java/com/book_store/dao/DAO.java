@@ -44,9 +44,14 @@ public interface DAO {
     List<Book> searchBookByCategory(String category, int pageSize , int pageNumber);
     List<Book> searchBooksByAuthor(String author, int pageSize , int pageNumber);
 
+    /**
+     *  Handling shopping cart table
+     */
+
+    
 
     /**
-     * Other functions (Mainly for testing)
+     * Other functions (utils functions)
      */
     // Deletes user by ID
     int deleteUser(int ID);
@@ -60,4 +65,7 @@ public interface DAO {
 
     // gets all the authors of a specific book ISBN
     List<String> getAuthors(String ISBN);
+
+    // Get books price
+    Integer getBookPrice(String ISBN);
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.book_store.frontend.WelcomeScreenController">
+   <children>
+      <ListView fx:id="booksList" fixedCellSize="40.0" layoutY="282.0" prefHeight="398.0" prefWidth="600.0" />
+      <Button layoutX="326.0" layoutY="680.0" mnemonicParsing="false" onAction="#next" prefHeight="26.0" prefWidth="47.0" text="Next">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Button>
+      <Button layoutX="227.0" layoutY="680.0" mnemonicParsing="false" onAction="#previous" prefHeight="26.0" prefWidth="47.0" text="Prev">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Button>
+      <Label fx:id="pageNumber" alignment="CENTER" contentDisplay="CENTER" layoutX="284.0" layoutY="684.0" prefHeight="18.0" prefWidth="32.0" text="1">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Label>
+      <TextField fx:id="searchField" layoutX="363.0" layoutY="50.0" prefHeight="26.0" prefWidth="158.0" />
+      <Button layoutX="532.0" layoutY="50.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="55.0" text="Search">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Button>
+      <Button layoutX="533.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="Logout">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Button>
+      <ComboBox fx:id="searchByBox" layoutX="363.0" layoutY="84.0" prefHeight="26.0" prefWidth="158.0" promptText="Search By" />
+      <AnchorPane fx:id="bookInfoContainer" layoutY="174.0" prefHeight="108.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="10.0" layoutY="13.0" prefHeight="18.0" prefWidth="47.0" text="Name:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Button layoutX="498.0" layoutY="9.0" mnemonicParsing="false" onAction="#addToCart" text="Add to cart" />
+            <Label layoutX="10.0" layoutY="44.0" prefHeight="18.0" prefWidth="55.0" text="category:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="74.0" prefHeight="18.0" prefWidth="101.0" text="publication year:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="291.0" layoutY="45.0" prefHeight="18.0" prefWidth="87.0" text="book price:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="394.0" layoutY="13.0" prefHeight="18.0" prefWidth="39.0" text="count:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="buyCount" layoutX="439.0" layoutY="9.0" prefHeight="18.0" prefWidth="47.0" />
+            <Label fx:id="name" layoutX="51.0" layoutY="13.0" prefHeight="18.0" prefWidth="198.0" />
+            <Label fx:id="category" layoutX="65.0" layoutY="43.0" prefHeight="18.0" prefWidth="211.0" />
+            <Label fx:id="publicationYear" layoutX="112.0" layoutY="74.0" prefHeight="18.0" prefWidth="172.0" />
+            <Label fx:id="price" layoutX="372.0" layoutY="45.0" prefHeight="18.0" prefWidth="82.0" />
+            <Label layoutX="291.0" layoutY="74.0" prefHeight="18.0" prefWidth="87.0" text="books in stock:">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="stockCount" layoutX="392.0" layoutY="74.0" prefHeight="18.0" prefWidth="81.0" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="210.0" layoutY="54.0" text="Shopping Cart">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Label>
+      <Button layoutX="215.0" layoutY="72.0" mnemonicParsing="false" onAction="#checkout" text="Checkout" />
+      <AnchorPane layoutY="-1.0" prefHeight="169.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="adminReport" layoutX="52.0" layoutY="103.0" mnemonicParsing="false" onAction="#reportAnalysis" text="Report analysis" />
+            <Button fx:id="adminAddBook" layoutX="47.0" layoutY="40.0" mnemonicParsing="false" onAction="#addBook" text="Add" />
+            <Button fx:id="adminShowUsers" layoutX="52.0" layoutY="136.0" mnemonicParsing="false" onAction="#showUsers" prefHeight="26.0" prefWidth="96.0" text="Show users" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="20.0" prefHeight="18.0" prefWidth="147.0" text="Books manager">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Button fx:id="adminModifyBook" layoutX="96.0" layoutY="40.0" mnemonicParsing="false" onAction="#modifyBook" text="modify" />
+            <Button layoutX="52.0" layoutY="72.0" mnemonicParsing="false" onAction="#confirmOrders" prefHeight="26.0" prefWidth="96.0" text="Confirm orders" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

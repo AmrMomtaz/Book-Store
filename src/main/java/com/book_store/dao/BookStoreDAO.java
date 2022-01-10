@@ -249,4 +249,10 @@ public class BookStoreDAO implements DAO{
         String sql = "SELECT author_name FROM authors WHERE ISBN = ?";
         return jdbcTemplate.query(sql,(rs, rowNum) -> rs.getString("author_name"),ISBN);
     }
+
+    @Override
+    public Integer getBookPrice(String ISBN) {
+        String sql = "SELECT selling_price FROM books WHERE ISBN = ?";
+        return jdbcTemplate.queryForObject(sql,(rs, rowNum) -> rs.getInt("selling_price"),ISBN);
+    }
 }

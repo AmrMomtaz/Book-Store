@@ -35,7 +35,6 @@ public class shoppingCartController {
     public void setUser(User user) {
         this.user = user;
     }
-
     public void start() {
         bookInfoContainer.setOpacity(0);
         bookInfoContainer.setDisable(true);

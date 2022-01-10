@@ -40,7 +40,6 @@ public class updateUserInfoController {
             password.setText(user.getPassword());
         }
     }
-
     @FXML
     public void saveChanges(ActionEvent event) throws IOException {
         if(validateFields()){

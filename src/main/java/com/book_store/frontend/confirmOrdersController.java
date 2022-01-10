@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 public class confirmOrdersController {
     private User user;
 
+
     public void setUser(User user) {
         this.user = user;
     }

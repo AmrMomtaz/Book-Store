@@ -1,7 +1,4 @@
 package com.book_store.frontend;
-
-import com.book_store.dao.BookStoreDAO;
-import com.book_store.dao.DAO;
 import com.book_store.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,11 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class LogInSceneController {
@@ -49,9 +44,10 @@ public class LogInSceneController {
            }
         }
     }
+
     @FXML
     public void SwitchToRegisterScene(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/register.fxml")));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

@@ -19,6 +19,7 @@ public interface DAO {
     int createUser(User newUser);
 
     //
+
     int updateUser(User user);
 
     /**

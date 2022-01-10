@@ -147,7 +147,6 @@ public class WelcomeScreenController{
         booksList.getItems().remove(0,10);
         booksList.getItems().addAll(booksToArray());
     }
-
     public void logout(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

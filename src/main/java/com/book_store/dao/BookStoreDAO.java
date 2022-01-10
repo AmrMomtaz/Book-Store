@@ -348,5 +348,6 @@ public class BookStoreDAO implements DAO{
     public Integer getBookPrice(String ISBN) {
         String sql = "SELECT selling_price FROM books WHERE ISBN = ?";
         return jdbcTemplate.queryForObject(sql,(rs, rowNum) -> rs.getInt("selling_price"),ISBN);
+
     }
 }

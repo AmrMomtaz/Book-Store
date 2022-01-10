@@ -23,7 +23,6 @@ public class RegisterSceneController {
     @FXML
     private PasswordField password;
 
-
     @FXML
     public void CreateAccount(ActionEvent event){
         if(invalidateFields()){

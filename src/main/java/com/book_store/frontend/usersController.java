@@ -9,6 +9,7 @@ public class usersController {
         this.user = user;
     }
 
+
     public void next(ActionEvent event) {
     }
 

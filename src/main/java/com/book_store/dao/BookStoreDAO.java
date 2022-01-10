@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -156,6 +155,7 @@ public class BookStoreDAO implements DAO{
 
     @Override
     public int updateUser(User user) {
+        //TODO
         return 0;
     }
 
@@ -260,13 +260,13 @@ public class BookStoreDAO implements DAO{
     @Override
     public List<Book> searchBooksByAuthor(String author, int pageSize, int pageNumber) {
         String sql = "SELECT * FROM  books AS B WHERE B.ISBN IN " +
-                "(SELECT DISTINCT ISBN FROM authors AS A WHERE A.author_name LIKE ? LIMIT ?,?)";
+                "(SELECT DISTINCT ISBN FROM authors AS A WHERE A.author_name LIKE ?)LIMIT ?,?";
         return jdbcTemplate.query(sql,bookRowMapper,author + "%", (pageNumber-1)*pageSize,pageSize);
     }
 
     @Override
     public int addItemInShoppingCart(ShoppingCart newItem) {
-        newItem.setPrice(getBookPrice(newItem.getISBN()));
+        newItem.setPrice(getBookPrice(newItem.getISBN())*newItem.getCount());
         return jdbcTemplate.update("INSERT INTO  shopping_cart VALUES (?,?,?,?)"
         ,newItem.getUserID(),newItem.getISBN(),newItem.getCount(),newItem.getPrice());
     }
@@ -287,13 +287,34 @@ public class BookStoreDAO implements DAO{
 
     @Override
     public int confirmPurchase(CreditCard creditCard, int userID) {
+        CreditCard verifiedCard = jdbcTemplate.queryForObject("SELECT * FROM credit_card WHERE " +
+                "number = ? AND date = ?" ,
+                (rs,rowNum)-> new CreditCard(rs.getString("number"),rs.getString("date")));
+        System.out.println(verifiedCard);
         return 0;
     }
 
     @Override
-    public boolean deleteCartItem(ShoppingCart item) {
-        return false;
+    public int deleteCartItem(int userID, String ISBN) {
+        return jdbcTemplate.update("DELETE FROM shopping_cart WHERE user_ID = ? AND ISBN = ?",userID,ISBN);
     }
+
+    @Override
+    public int userLogout(int userID) {
+
+        return 0;
+    }
+
+    @Override
+    public List<User> listCustomers(int pageSize, int pageNumber) {
+        return null;
+    }
+
+    @Override
+    public int promoteUser(int userID) {
+        return 0;
+    }
+
 
     @Override
     public int deleteUser(int ID) {

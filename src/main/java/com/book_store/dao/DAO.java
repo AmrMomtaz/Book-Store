@@ -18,8 +18,7 @@ public interface DAO {
     // It creates the user record in the database and returns 1 if the insertion succeeded (used in signing up)
     int createUser(User newUser);
 
-    //
-
+    // Updates user information
     int updateUser(User user);
 
     /**
@@ -59,7 +58,22 @@ public interface DAO {
     // Confirm purchase by User
     int confirmPurchase(CreditCard creditCard, int userID);
 
-    boolean deleteCartItem(ShoppingCart item);
+    // Deletes item from the cart
+    int deleteCartItem(int userID,String ISBN);
+
+    // User Log out
+    int userLogout(int userID);
+
+    /**
+     * Administrator functions
+     */
+
+    // This function returns a lost of customers
+    List<User> listCustomers(int pageSize , int pageNumber);
+
+    // This function promote users
+    int promoteUser(int userID);
+    
 
     /**
      * Other functions (utils functions)

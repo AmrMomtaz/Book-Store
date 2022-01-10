@@ -19,19 +19,15 @@ public class BookStoreApplication {
     private static BookStoreDAO dbo;
     private static ReportGenerator reportGenerator=new ReportGenerator(dbo);
 
-
     public static DAO dao;
 
     public BookStoreApplication(DAO Dao){
         dao = Dao;
     }
     public static void main(String[] args) {
-
         SpringApplication.run(BookStoreApplication.class, args);
         frontEndDAO.dao = dao;
         Application.launch(Main.class,args);
-        System.out.println(dao);
     }
-
 
 }

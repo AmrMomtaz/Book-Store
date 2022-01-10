@@ -1,9 +1,7 @@
 package com.book_store;
 
 import com.book_store.dao.DAO;
-import com.book_store.model.Book;
-import com.book_store.model.Publisher;
-import com.book_store.model.User;
+import com.book_store.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,5 +66,54 @@ public class DaoTests {
         for (int i = 10; i < 20; i++)
             Assertions.assertEquals(1,dao.deleteBook(Integer.toString(i)));
         Assertions.assertEquals(1,dao.deletePublisher("publisherTest"));
+    }
+
+    @Test
+    @DisplayName("Testing shopping cart and authentication")
+    void shoppingCartTests(){
+        Assertions.assertEquals(1,dao.createCreditCard(new CreditCard("test","test")));
+        User user1 = new User("t","t","t","t","t","t","t");
+        User user2 = new User("t","t","t","t","tt","t","t");
+        User user3 = new User("t","t","t","t","ttt","t","t");
+        Assertions.assertEquals(1,dao.createUser(user1));
+        Assertions.assertEquals(1,dao.createUser(user2));
+        Assertions.assertEquals(1,dao.createUser(user3));
+        Assertions.assertEquals(1,dao.createPublisher(
+                new Publisher("PUBLISHER_TEST","t","t")));
+        Book book1 = new Book("t","t","PUBLISHER_TEST","t",
+                100,"science",50,200, Arrays.asList("author1","author2","author3"));
+        Book book2 = new Book("tt","t","PUBLISHER_TEST","t",
+                100,"science",50,200, Arrays.asList("author1","author2","author3"));
+        Assertions.assertEquals(1,dao.createBook(book1));
+        Assertions.assertEquals(1,dao.createBook(book2));
+
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user1.getID(),book1.getISBN(),10)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user1.getID(),book2.getISBN(),20)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user2.getID(),book1.getISBN(),10)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user2.getID(),book2.getISBN(),20)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user3.getID(),book1.getISBN(),10)
+        ));
+        Assertions.assertEquals(1,dao.addItemInShoppingCart(new ShoppingCart(
+                user3.getID(),book2.getISBN(),20)
+        ));
+
+
+        Assertions.assertEquals(1,dao.deleteBook("t"));
+        Assertions.assertEquals(1,dao.deleteBook("tt"));
+        Assertions.assertEquals(1,dao.deletePublisher("PUBLISHER_TEST"));
+        Assertions.assertEquals(1,dao.deleteUser(user1.getID()));
+        Assertions.assertEquals(1,dao.deleteUser(user2.getID()));
+        Assertions.assertEquals(1,dao.deleteUser(user3.getID()));
+        Assertions.assertEquals(1,dao.deleteCreditCard("test"));
+
     }
 }

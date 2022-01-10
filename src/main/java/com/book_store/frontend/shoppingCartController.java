@@ -101,8 +101,8 @@ public class shoppingCartController {
     }
 
     public void removeBook(javafx.event.ActionEvent event) {
-        if(cartItem!=null)
-            frontEndDAO.dao.deleteCartItem(cartItem);
+        //if(cartItem!=null)
+            //frontEndDAO.dao.deleteCartItem(cartItem);
     }
 
     public void homePage(javafx.event.ActionEvent event) throws IOException {

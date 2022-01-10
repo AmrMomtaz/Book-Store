@@ -1,8 +1,6 @@
 package com.book_store.dao;
 
-import com.book_store.model.Book;
-import com.book_store.model.Publisher;
-import com.book_store.model.User;
+import com.book_store.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +100,7 @@ public class BookStoreDAO implements DAO{
     public int createUser(User newUser) {
         int newID = getNewID();
         newUser.setID(newID);
+        newUser.setType("customer");
         String sql = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?)";
         int insert = jdbcTemplate.update(sql,newID,newUser.getUsername(),newUser.getPassword(),newUser.getFirst_name(),
                 newUser.getLast_name(),newUser.getEmail(),newUser.getPhonenumber(),
@@ -208,8 +207,34 @@ public class BookStoreDAO implements DAO{
     @Override
     public List<Book> searchBooksByAuthor(String author, int pageSize, int pageNumber) {
         String sql = "SELECT * FROM  books AS B WHERE B.ISBN IN " +
-                "(SELECT DISTINCT ISBN FROM authors AS A WHERE A.author_name LIKE ?)";
-        return jdbcTemplate.query(sql,bookRowMapper,author + "%");
+                "(SELECT DISTINCT ISBN FROM authors AS A WHERE A.author_name LIKE ? LIMIT ?,?)";
+        return jdbcTemplate.query(sql,bookRowMapper,author + "%", (pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public int addItemInShoppingCart(ShoppingCart newItem) {
+        newItem.setPrice(getBookPrice(newItem.getISBN()));
+        return jdbcTemplate.update("INSERT INTO  shopping_cart VALUES (?,?,?,?)"
+        ,newItem.getUserID(),newItem.getISBN(),newItem.getCount(),newItem.getPrice());
+    }
+
+    @Override
+    public List<ShoppingCart> listItemsInShoppingCart(int userID , int pageSize , int pageNumber) {
+        String sql = "SELECT * FROM shopping_cart WHERE user_ID = ? LIMIT ?,?";
+        return jdbcTemplate.query(sql,(rs,rowNum)->{
+            int user_id = rs.getInt("user_ID");
+            String ISBN = rs.getString("ISBN");
+            int count = rs.getInt("count");
+            int price = rs.getInt("price");
+            ShoppingCart shoppingCart = new ShoppingCart(user_id,ISBN,count);
+            shoppingCart.setPrice(price);
+            return shoppingCart;
+        },userID,(pageNumber-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public int confirmPurchase(CreditCard creditCard, int userID) {
+        return 0;
     }
 
     @Override
@@ -242,6 +267,17 @@ public class BookStoreDAO implements DAO{
     @Override
     public int deletePublisher(String publisherName) {
         return jdbcTemplate.update("DELETE FROM publishers WHERE name = ?", publisherName);
+    }
+
+    @Override
+    public int createCreditCard(CreditCard creditCard) {
+        return jdbcTemplate.update("INSERT INTO credit_card VALUES (?,?)",
+                creditCard.getNumber(),creditCard.getExpire_date());
+    }
+
+    @Override
+    public int deleteCreditCard(String number) {
+        return jdbcTemplate.update("DELETE FROM credit_card WHERE number = ?", number);
     }
 
     @Override

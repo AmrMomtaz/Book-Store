@@ -1,8 +1,6 @@
 package com.book_store.dao;
 
-import com.book_store.model.Book;
-import com.book_store.model.Publisher;
-import com.book_store.model.User;
+import com.book_store.model.*;
 
 import java.util.List;
 
@@ -48,7 +46,14 @@ public interface DAO {
      *  Handling shopping cart table
      */
 
-    
+    // Creates item in the shopping cart
+    int addItemInShoppingCart(ShoppingCart newItem);
+
+    // List all the items of specific user in the shopping cart
+    List<ShoppingCart> listItemsInShoppingCart(int userID , int pageSize , int pageNumber);
+
+    // Confirm purchase by User
+    int confirmPurchase(CreditCard creditCard, int userID);
 
     /**
      * Other functions (utils functions)
@@ -62,6 +67,10 @@ public interface DAO {
     // Create and delete publisher
     int createPublisher(Publisher newPublisher);
     int deletePublisher(String publisherName);
+
+    // Create and delete credit card
+    int createCreditCard(CreditCard creditCard);
+    int deleteCreditCard(String number);
 
     // gets all the authors of a specific book ISBN
     List<String> getAuthors(String ISBN);
